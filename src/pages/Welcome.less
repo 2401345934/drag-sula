@@ -1,8 +1,28 @@
 @import '~antd/lib/style/themes/default.less';
 
-.pre {
-  margin: 12px 0;
-  padding: 12px 20px;
-  background: @input-bg;
-  box-shadow: @card-shadow;
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50px;
+}
+
+.warp {
+  display: flex;
+  height: calc(100vh - 50px);
+  .left {
+    padding: 15px;
+
+    width: 15%;
+    background: #eee;
+  }
+  .content {
+    flex: 1;
+    background: #fff;
+    border: 1px solid #000;
+  }
+  .right {
+    width: 20%;
+    background: rgb(255, 155, 155);
+  }
 }

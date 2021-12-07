@@ -54,14 +54,14 @@ request.use({
         onClose: async () => {
           localStorage.removeItem('userInfo');
           localStorage.removeItem('buttonAuth');
-          if (window.location.pathname !== '/user/login') {
+          if (window.location.pathname !== '/') {
             // @ts-ignore
             if (BUILD_TYPE) {
               history.replace({
-                pathname: '/user/login',
+                pathname: '/',
               });
             } else {
-              window.location.href = '/#/user/login';
+              window.location.href = '/#/';
             }
           }
         },
