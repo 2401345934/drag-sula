@@ -5,13 +5,12 @@
 /*
  * @Author: your name
  * @Date: 2021-09-02 17:15:38
- * @LastEditTime: 2021-10-30 09:57:11
+ * @LastEditTime: 2021-12-07 15:44:34
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \operation-management-frontend\src\plugins\request.js
  */
 import { request } from 'bssula';
-import { handleRequestHeader } from "@/utils/requestUtils";
 import { notification } from "antd";
 import { history } from "@@/core/history";
 import moment from "moment"
