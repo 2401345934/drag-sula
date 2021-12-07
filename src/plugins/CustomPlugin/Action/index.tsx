@@ -1,3 +1,11 @@
+/*
+ * @Author: your name
+ * @Date: 2021-09-06 09:03:30
+ * @LastEditTime: 2021-09-23 09:12:44
+ * @LastEditors: your name
+ * @Description: In User Settings Edit
+ * @FilePath: \oms-ops-front\src\plugins\CustomPlugin\Action\index.tsx
+ */
 import { registerActionPlugin, request } from 'bssula';
 
 registerActionPlugin('bs-delete', async (ctx: any, config: any) => {
@@ -17,3 +25,4 @@ registerActionPlugin('bs-delete', async (ctx: any, config: any) => {
     successMessage: '删除成功',
   });
 });
+

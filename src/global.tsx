@@ -1,9 +1,32 @@
+/*
+ * @Author: your name
+ * @Date: 2021-12-07 15:36:48
+ * @LastEditTime: 2021-12-07 15:39:10
+ * @LastEditors: your name
+ * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ * @FilePath: \drag-sula\src\global.tsx
+ */
 import { Button, message, notification } from 'antd';
 import { useIntl } from 'umi';
 import defaultSettings from '../config/defaultSettings';
-import './plugins';
+
 const { pwa } = defaultSettings;
 const isHttps = document.location.protocol === 'https:';
+import './plugins';
+
+const clearCache = () => {
+  // remove all caches
+  if (window.caches) {
+    caches
+      .keys()
+      .then((keys) => {
+        keys.forEach((key) => {
+          caches.delete(key);
+        });
+      })
+      .catch((e) => console.log(e));
+  }
+};
 
 // if pwa is true
 if (pwa) {
@@ -34,8 +57,9 @@ if (pwa) {
         };
         worker.postMessage({ type: 'skip-waiting' }, [channel.port2]);
       });
-      // Refresh current page to use the updated HTML and other assets after SW has skiped waiting
-      window.location.reload(true);
+
+      clearCache();
+      window.location.reload();
       return true;
     };
     const key = `open${Date.now()}`;
@@ -72,12 +96,5 @@ if (pwa) {
     if (sw) sw.unregister();
   });
 
-  // remove all caches
-  if (window.caches && window.caches.keys()) {
-    caches.keys().then((keys) => {
-      keys.forEach((key) => {
-        caches.delete(key);
-      });
-    });
-  }
+  clearCache();
 }

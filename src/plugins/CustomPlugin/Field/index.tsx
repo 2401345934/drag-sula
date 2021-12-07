@@ -1,12 +1,13 @@
 /*
  * @Description:
- * @Author: rodchen
+ * @Author: minghuiXiao
  * @Date: 2021-06-27 15:58:26
- * @LastEditTime: 2021-07-27 17:26:43
+ * @LastEditTime: 2021-11-21 17:20:46
  * @LastEditors: Please set LastEditors
  */
 import { registerFieldPlugin, request } from 'bssula';
-import { Input, Tooltip } from 'antd';
+import { history } from 'umi';
+import { Input } from 'antd';
 import moment from 'moment';
 import { isValidateValue } from '@/utils/utils';
 import RemoteSearch from '@/components/RemoteSearch';
@@ -16,31 +17,22 @@ import RemoteDepartmentTreeSelect from '@/components/RemoteSearch/departmentTree
 import RemoteStationNeedShowOpt from '@/components/RemoteSearch/stationShowOpt';
 import BsNumberRange from './BsNumberRange';
 import BsTableField from './BsTableField';
-import BsBuyInformation from './BsBuyInformation';
-import BsUploadList from './BsUploadList';
-import BsDragUpload from './BsDragUpload';
-import DynamicFieldComp from './DynamicFieldComp';
-import RemoteOnLoadTreeSelect from '@/components/RemoteSearch/onLoadTreeSelect';
 import BsSearchSelect from './BsSearchSelect';
-import TreeSelect from './TreeSelect';
-import EditorDemo from './BraftEditor';
+import BsCascader from './BsCascader';
+import BsInputRate from './BsInputRate';
 
-registerFieldPlugin('braft-editor')(EditorDemo, true, true);
-registerFieldPlugin('bs-treeSelect')(TreeSelect, true, true);
-registerFieldPlugin('bs-searchSelect')(BsSearchSelect, true, true);
 /** field插件 */
-registerFieldPlugin('bs-dynamic-field-comp')(DynamicFieldComp);
+registerFieldPlugin('bs-cascader')(BsCascader, true, true);
+/* ***************************** input下面带有小旗子 ******************************** */
+registerFieldPlugin('bs-inputRate')(BsInputRate, true, true);
 /* ***************************** 数字范围 ******************************** */
 registerFieldPlugin('bs-numberRange')(BsNumberRange, true, true);
 
 /* ***************************** 表单项 - 不可编辑表格 **************************** */
 registerFieldPlugin('bs-TableField')(BsTableField, true, true);
-/* ***************************** 表单项 - 上传 **************************** */
-registerFieldPlugin('bs-uploadList')(BsUploadList, true, true);
-registerFieldPlugin('bs-dragUpload')(BsDragUpload, true, true);
+
 /* ***************************** 表单项 - 可编辑表格（未完成） ****************************** */
 // registerFieldPlugin('bs-editTableField')(BsEditTableField, true, true);
-registerFieldPlugin('bs-buy-information')(BsBuyInformation, true, true);
 
 /* ***************************** 重复项校验 **************************** */
 registerFieldPlugin('bs-testItemInput')(
@@ -82,7 +74,7 @@ registerFieldPlugin('bs-testItemInput')(
 
 /* ***************************** form详情文字项 ******************************** */
 registerFieldPlugin('bs-formText')(
-  ({ ctx, text, id, formatDate, value, isEllemepis }: any) => {
+  ({ ctx, text, id, formatDate, value, color, href }: any) => {
     // 处理时间 需要先引入 moment ， 然后在页面的适用时， 在props下传入一个moment的时间格式(如: YYYY-MM-DD)
     if (formatDate) {
       if (!ctx.form.getFieldsValue(true)[id]) return '';
@@ -99,24 +91,19 @@ registerFieldPlugin('bs-formText')(
       textVal = text;
     }
 
-    if (isEllemepis) {
+    if (href) {
       return (
-        <Tooltip title={textVal}>
-          <span
-            style={{
-              width: '100%',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              // whiteSpace: 'wrap',
-            }}
-          >
-            {textVal}
-          </span>
-        </Tooltip>
+        <a
+          onClick={() => {
+            history.push(`/order-management/sales-order-list/detail/${textVal}`);
+          }}
+        >
+          {textVal}
+        </a>
       );
     }
 
-    return <span style={{ wordWrap: 'break-word' }}>{textVal}</span>;
+    return <span style={{ color }}>{textVal}</span>;
   },
   true,
   true,
@@ -137,12 +124,5 @@ registerFieldPlugin('bs-remoteDepartmentTreeSelect')(RemoteDepartmentTreeSelect,
 /* ***************************** 分组select ******************************** */
 registerFieldPlugin('bs-remoteStationNeedShowOpt')(RemoteStationNeedShowOpt, true, true);
 
-registerFieldPlugin('customremotesearchneedshowopt')(RemoteSearchNeedShowOpt, true, true); // 分组select
-
-registerFieldPlugin('customremotesearchtreeselect')(RemoteSearchTreeSelect, true, true); // 树选择
-
-registerFieldPlugin('customremotedepartmenttreeselect')(RemoteDepartmentTreeSelect, true, true); // 树选择
-
-registerFieldPlugin('customremotestationneedshowopt')(RemoteStationNeedShowOpt, true, true); // 分组select
-
-registerFieldPlugin('customremotesearchonload')(RemoteOnLoadTreeSelect, true, true); // 分组select 异步加载数据
+/* ***************************** 获取远程数据select ******************************** */
+registerFieldPlugin('bs-searchSelect')(BsSearchSelect, true, true);

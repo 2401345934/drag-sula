@@ -1,14 +1,33 @@
+/*
+ * @Author: your name
+ * @Date: 2021-09-06 09:03:30
+ * @LastEditTime: 2021-09-27 20:25:55
+ * @LastEditors: your name
+ * @Description: In User Settings Edit
+ * @FilePath: \oms-ops-front\src\plugins\CustomPlugin\Field\BsNumberRange\index.tsx
+ */
 // @ts-nocheck
 
 import React, { useState, useEffect } from 'react';
 import { InputNumber } from 'antd';
 import styles from './index.less';
 
-const BsNumberRange = ({ onChange }: any) => {
+const BsNumberRange = ({ onChange, value }: any) => {
   const [value1, setValue1] = useState(undefined);
   const [value2, setValue2] = useState(undefined);
   const [maxValue1, setMaxValue1] = useState(undefined);
   const [minValue2, setMinValue2] = useState(0);
+
+  useEffect(() => {
+    if (
+      value &&
+      Array.isArray(value) &&
+      JSON.stringify(value) !== JSON.stringify([value1, value2])
+    ) {
+      setValue1(value[0]);
+      setValue2(value[1]);
+    }
+  }, [value]);
 
   useEffect(() => {
     setMinValue2(value1);

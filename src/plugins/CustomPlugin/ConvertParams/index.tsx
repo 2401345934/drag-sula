@@ -1,11 +1,3 @@
-/*
- * @Author: your name
- * @Date: 2021-07-05 09:32:00
- * @LastEditTime: 2021-08-17 10:20:00
- * @LastEditors: Please set LastEditors
- * @Description: In User Settings Edit
- * @FilePath: \purchase-platform-front\src\plugins\CustomPlugin\ConvertParams\index.tsx
- */
 // @ts-ignore
 import sula from 'bssula/es/core';
 import moment from 'moment';
@@ -57,14 +49,10 @@ sula.convertParamsType('tableConvertParamsType', (ctx: any, config: any) => {
           }
         });
         delete params[key];
-      } else if (element && key.indexOf('*dateType*') >= 0) {
-        const dataParams = key.split('*dateType*');
+      } else if (element && key.indexOf('*') >= 0) {
+        const dataParams = key.split('*');
         dataParams.forEach((value, index) => {
-          if (index === 0) {
-            params[value] = moment(element[index]).format('YYYY-MM-DD');
-          } else {
-            params[value] = moment(element[index]).format('YYYY-MM-DD');
-          }
+          params[value] = element[index].format('YYYY-MM-DD HH:mm:ss');
         });
         delete params[key];
       } else if (Array.isArray(element)) {
@@ -82,7 +70,7 @@ sula.convertParamsType('tableConvertParamsType', (ctx: any, config: any) => {
   }
 
   // 排序动作触发
-  let sorter = initialValues.sorter;
+  let sorter;
   if (Object.keys(ctx.params.sorter).length) {
     if (ctx.params.sorter['order'] === 'ascend') {
       sorter = `asc-${ctx.params.sorter.columnKey}`;

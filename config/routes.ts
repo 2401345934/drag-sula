@@ -1,12 +1,4 @@
-﻿/*
- * @Author: your name
- * @Date: 2021-08-20 21:12:58
- * @LastEditTime: 2021-09-16 14:37:51
- * @LastEditors: Please set LastEditors
- * @Description: In User Settings Edit
- * @FilePath: \react-umi-duv-ts-sula\config\routes.ts
- */
-export default [
+﻿export default [
   {
     path: '/user',
     layout: false,
@@ -21,25 +13,44 @@ export default [
           },
         ],
       },
+      {
+        component: './404',
+      },
     ],
   },
   {
-    path: '/',
-    component: '../layouts/BaseLayout',
+    path: '/welcome',
+    name: 'welcome',
+    icon: 'smile',
+    component: './Welcome',
+  },
+  {
+    path: '/admin',
+    name: 'admin',
+    icon: 'crown',
+    access: 'canAdmin',
+    component: './Admin',
     routes: [
       {
-        path: '/welcome',
-        name: 'welcome',
+        path: '/admin/sub-page',
+        name: 'sub-page',
         icon: 'smile',
         component: './Welcome',
       },
       {
-        name: 'list.table-list',
-        icon: 'table',
-        path: '/list',
-        component: './TableList',
+        component: './404',
       },
     ],
+  },
+  {
+    name: 'list.table-list',
+    icon: 'table',
+    path: '/list',
+    component: './TableList',
+  },
+  {
+    path: '/',
+    redirect: '/welcome',
   },
   {
     component: './404',

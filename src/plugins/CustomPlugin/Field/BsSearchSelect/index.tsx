@@ -1,15 +1,15 @@
 /* eslint-disable no-nested-ternary */
 /*
  * @Description:
- * @Author: rodchen
+ * @Author: minghuiXiao
  * @Date: 2021-01-20 23:23:08
- * @LastEditTime: 2021-07-20 19:56:55
+ * @LastEditTime: 2021-10-27 14:50:04
  * @LastEditors: Please set LastEditors
  */
 import React from 'react';
-import { Select } from 'antd';
+import { Select, Tooltip } from 'antd';
 import { request } from 'bssula';
-import { omit, debounce } from 'lodash';
+import { debounce } from 'lodash';
 
 export default class BsSearchSelect extends React.Component<any> {
   initSource = false;
@@ -74,7 +74,8 @@ export default class BsSearchSelect extends React.Component<any> {
   };
 
   handleSearch = (value: any, initValue?: any) => {
-    const { requestConfig, ctx } = this.props as any;
+    const { requestConfig, ctx, isMap } = this.props as any;
+    value = value.replace("'", '');
     if (value) {
       this.setState({
         saveSearchVal: value,
@@ -90,6 +91,8 @@ export default class BsSearchSelect extends React.Component<any> {
         }
       });
     }
+    // 需要默认传的参数
+    const { otherParams } = requestConfig;
     request({
       url: requestConfig.url,
       method: 'get',
@@ -105,30 +108,41 @@ export default class BsSearchSelect extends React.Component<any> {
           };
         }
         return {
-          pageSize: 5000,
+          pageSize: 1000,
+          ...otherParams,
           ...params,
           ...fixedParam,
           ...reqParams,
         };
       },
     }).then((res: any) => {
-      const keys = res.list ? 'list' : 'items';
-      const source = res
-        ? res[keys]
-          ? res[keys].map((item: any) => {
-              return {
-                text: item[requestConfig.mappingTextField],
-                value: item[requestConfig.mappingValueField],
-              };
-            })
-          : Array.isArray(res) &&
-            res?.map((item: Record<string, any>) => {
-              return {
-                text: item[requestConfig.mappingTextField],
-                value: item[requestConfig.mappingValueField],
-              };
-            })
-        : [];
+      let source = [];
+      if (isMap) {
+        source = Object.keys(res).map((d, i) => {
+          return {
+            text: Object.values(res)[i],
+            value: d,
+          };
+        });
+      } else {
+        const keys = res.list ? 'list' : 'items';
+        source = res
+          ? res[keys]
+            ? res[keys].map((item: any) => {
+                return {
+                  text: item[requestConfig.mappingTextField],
+                  value: item[requestConfig.mappingValueField],
+                };
+              })
+            : Array.isArray(res) &&
+              res?.map((item: Record<string, any>) => {
+                return {
+                  text: item[requestConfig.mappingTextField],
+                  value: item[requestConfig.mappingValueField],
+                };
+              })
+          : [];
+      }
       this.setState({
         source: Array.isArray(source) ? source : [],
       });
@@ -136,7 +150,7 @@ export default class BsSearchSelect extends React.Component<any> {
   };
 
   handleSelect = () => {
-    const { requestConfig, ctx } = this.props as any;
+    const { requestConfig, ctx, isMap } = this.props as any;
     this.setState({
       saveSearchVal: '',
     });
@@ -150,6 +164,8 @@ export default class BsSearchSelect extends React.Component<any> {
         }
       });
     }
+    // 需要默认传的参数
+    const { otherParams } = requestConfig;
     request({
       url: requestConfig.url,
       method: 'get',
@@ -161,30 +177,41 @@ export default class BsSearchSelect extends React.Component<any> {
           };
         }
         return {
-          pageSize: 5000,
+          pageSize: 1000,
+          ...otherParams,
           ...params,
           ...fixedParam,
           ...reqParams,
         };
       },
     }).then((res: any) => {
-      const keys = res.list ? 'list' : 'items';
-      const source = res
-        ? res[keys]
-          ? res[keys].map((item: any) => {
-              return {
-                text: item[requestConfig.mappingTextField],
-                value: item[requestConfig.mappingValueField],
-              };
-            })
-          : Array.isArray(res) &&
-            res?.map((item: Record<string, any>) => {
-              return {
-                text: item[requestConfig.mappingTextField],
-                value: item[requestConfig.mappingValueField],
-              };
-            })
-        : [];
+      let source = [];
+      if (isMap) {
+        source = Object.keys(res).map((d, i) => {
+          return {
+            text: Object.values(res)[i],
+            value: d,
+          };
+        });
+      } else {
+        const keys = res.list ? 'list' : 'items';
+        source = res
+          ? res[keys]
+            ? res[keys].map((item: any) => {
+                return {
+                  text: item[requestConfig.mappingTextField],
+                  value: item[requestConfig.mappingValueField],
+                };
+              })
+            : Array.isArray(res) &&
+              res?.map((item: Record<string, any>) => {
+                return {
+                  text: item[requestConfig.mappingTextField],
+                  value: item[requestConfig.mappingValueField],
+                };
+              })
+          : [];
+      }
       this.setState({
         source: Array.isArray(source) ? source : [],
       });
@@ -202,10 +229,11 @@ export default class BsSearchSelect extends React.Component<any> {
       ...restProps
     } = this.props;
 
-    const { source } = this.state;
+    const { source }: any = this.state;
     const { Option } = Select;
     return (
       <Select
+        style={{ minWidth: 100 }}
         labelInValue={this.props.inlabelInValue}
         showSearch
         value={value}
@@ -216,17 +244,16 @@ export default class BsSearchSelect extends React.Component<any> {
         onSearch={requestConfig.filter ? debounce(this.handleSearch, 500) : () => {}}
         onFocus={requestConfig.filter ? this.handleSelect : () => {}}
         onBlur={this.handleBlur}
+        dropdownMatchSelectWidth={false}
+        dropdownClassName="dropdownClassName"
         mode={selectMuch ? 'multiple' : undefined}
         // showArrow={true}
-        filterOption={(input, option) => {
-          if (requestConfig) {
-            return true;
-          }
+        filterOption={(input: any, option: any) => {
           return option.children && option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0;
         }}
         {...restProps}
       >
-        {source.map((item) => {
+        {source.map((item: any) => {
           return (
             <Option key={item.value} value={item.value}>
               {item.text}

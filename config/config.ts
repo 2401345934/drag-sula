@@ -1,11 +1,3 @@
-/*
- * @Author: your name
- * @Date: 2021-08-20 21:12:58
- * @LastEditTime: 2021-09-15 18:01:29
- * @LastEditors: Please set LastEditors
- * @Description: In User Settings Edit
- * @FilePath: \react-umi-duv-ts-sula\config\config.ts
- */
 // https://umijs.org/config/
 import { defineConfig } from 'umi';
 import { join } from 'path';
@@ -19,21 +11,16 @@ const { REACT_APP_ENV } = process.env;
 export default defineConfig({
   hash: true,
   antd: {},
-  bssula: {},
-  history: {
-    type: 'hash',
-  },
   dva: {
     hmr: true,
   },
-  layout: false, // 多页签
-
-  // layout: {
-  //   // https://umijs.org/zh-CN/plugins/plugin-layout
-  //   locale: true,
-  //   siderWidth: 208,
-  //   ...defaultSettings,
-  // },
+  bssula: {},
+  layout: {
+    // https://umijs.org/zh-CN/plugins/plugin-layout
+    locale: true,
+    siderWidth: 208,
+    ...defaultSettings,
+  },
   // https://umijs.org/zh-CN/plugins/plugin-locale
   locale: {
     // default zh-CN
@@ -53,6 +40,7 @@ export default defineConfig({
   // Theme for antd: https://ant.design/docs/react/customize-theme-cn
   theme: {
     'primary-color': defaultSettings.primaryColor,
+    'root-entry-name': 'default',
   },
   // esbuild is father build tools
   // https://umijs.org/plugins/plugin-esbuild
@@ -83,5 +71,4 @@ export default defineConfig({
   mfsu: {},
   webpack5: {},
   exportStatic: {},
-  devtool: 'source-map',
 });
