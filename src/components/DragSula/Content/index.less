@@ -4,15 +4,24 @@
     flex-wrap: wrap;
 
     .content {
-      width: 50px;
-      height: 30px;
-      background: red;
       display: flex;
       align-items: center;
       justify-content: center;
+      width: 50px;
+      height: 30px;
       margin-right: 20px;
       color: #fff;
+      background: red;
       user-select: none;
+
+      span {
+        display: inline-block;
+      }
     }
   }
+}
+
+.current {
+  margin: 5px;
+  border: 5px solid red;
 }
